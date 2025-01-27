@@ -1,14 +1,14 @@
 import express from 'express';
 import {Markup, Telegraf, session, Scenes} from 'telegraf';
-import { SERVER_PORT } from "./configs/configs.js";
-import { TELEGRAM_BOT_TOKEN } from "./configs/configs.js";
-import {sequelize} from "./configs/db.js";
-import {chooseCategory} from "./wizards/choose-category.js";
-import {createService} from "./wizards/create-service.js";
-import {findService} from "./wizards/find-service.js";
-import {managerComposer, manageServices} from "./wizards/manage-services.js";
-import {sendMarkdownMessageAndSave} from "./utils/clearChat.js";
-import {startMenuButtons} from "./configs/common.js";
+import { SERVER_PORT } from "./src/configs/configs.js";
+import { TELEGRAM_BOT_TOKEN } from "./src/configs/configs.js";
+import {sequelize} from "./src/configs/db.js";
+import {chooseCategory} from "./src/wizards/choose-category.js";
+import {createService} from "./src/wizards/create-service.js";
+import {findService} from "./src/wizards/find-service.js";
+import {managerComposer, manageServices} from "./src/wizards/manage-services.js";
+import {sendMarkdownMessageAndSave} from "./src/utils/clearChat.js";
+import {startMenuButtons} from "./src/configs/common.js";
 
 const app = express();
 app.use(express.json());
