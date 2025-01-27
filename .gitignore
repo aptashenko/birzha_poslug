@@ -1,0 +1,36 @@
+# Игнорировать папки зависимостей
+node_modules/
+vendor/
+bower_components/
+
+# Игнорировать файлы окружения
+.env
+.env.development
+.env.production
+
+# Игнорировать папки сборки
+dist/
+build/
+out/
+bin/
+
+# Игнорировать логи
+*.log
+logs/
+
+# Игнорировать файлы операционной системы
+.DS_Store
+Thumbs.db
+
+# Игнорировать папку IDE/редактора
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Игнорировать временные файлы
+tmp/
+temp/
