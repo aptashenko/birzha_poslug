@@ -68,3 +68,5 @@ bot.on('message', async (ctx) => {
         botMessages.get(chatId).push(messageId);
     }
 });
+
+export default app;
