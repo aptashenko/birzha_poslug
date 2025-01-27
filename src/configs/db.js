@@ -1,8 +1,9 @@
 import { Sequelize } from "sequelize";
+import pg from 'pg';
 import {SUPABASE_PASSWORD, SUPABASE_URL} from "./configs.js";
 
 const sequelize = new Sequelize(`postgresql://postgres:${SUPABASE_PASSWORD}@db.${SUPABASE_URL}/postgres`, {
-    dialect: 'postgres',
+    dialectModule: pg,
     schema: 'public',
     dialectOptions: {
         ssl: {
