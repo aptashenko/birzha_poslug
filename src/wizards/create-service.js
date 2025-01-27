@@ -4,13 +4,12 @@ import {ServiceManager} from "../models/Service.js";
 import toMainMenu from "../utils/toMainMenu.js";
 import cancelButton from "../utils/cancelButton.js";
 import {sendMarkdownMessageAndSave, sendMessageAndSave} from "../utils/clearChat.js";
-import {readFile} from "fs/promises";
-
-const texts = JSON.parse(await readFile('./src/locales/uk.json', 'utf-8'));
-
+import textLoader from "../utils/getTexts.js";
 export const createService = new Scenes.WizardScene(
     'create-service',
     async (ctx) => {
+        const {texts} = textLoader;
+
         await sendMarkdownMessageAndSave(
             ctx,
             texts.create_description,
@@ -24,6 +23,7 @@ export const createService = new Scenes.WizardScene(
         if (!await cancelButton(ctx)) return
 
         ctx.wizard.state.data.description = text;
+        const {texts} = textLoader;
 
         await sendMarkdownMessageAndSave(
             ctx,
@@ -38,6 +38,7 @@ export const createService = new Scenes.WizardScene(
     async (ctx) => {
         const {text} = ctx.message;
         if (!await cancelButton(ctx)) return
+        const {texts} = textLoader;
 
         ctx.wizard.state.data.cities = text.trim().split(',');
 
@@ -54,6 +55,7 @@ export const createService = new Scenes.WizardScene(
     async (ctx) => {
         const { text } = ctx.message;
         if (!await cancelButton(ctx)) return
+        const {texts} = textLoader;
 
         ctx.wizard.state.data.phone = text;
 
@@ -70,6 +72,7 @@ export const createService = new Scenes.WizardScene(
     async (ctx) => {
         const {text} = ctx.message;
         if (!await cancelButton(ctx)) return
+        const {texts} = textLoader;
 
         const { data } = ctx.wizard.state;
         data.username = text;
@@ -86,6 +89,7 @@ export const createService = new Scenes.WizardScene(
     async (ctx) => {
         const { text, from: {id} } = ctx.message;
         if (!await cancelButton(ctx)) return
+        const {texts} = textLoader;
 
         if (text === texts.accept) {
             const {
@@ -113,7 +117,7 @@ export const createService = new Scenes.WizardScene(
         } else if (text === texts.cancel) {
             await toMainMenu(ctx, texts.create_fail)
         } else {
-            await sendMessageAndSave(ctx,texts.create_choose);
+            await sendMessageAndSave(ctx, texts.create_choose);
             return; // Оставляем пользователя на этом шаге
         }
 

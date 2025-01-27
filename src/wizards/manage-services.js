@@ -3,14 +3,14 @@ import serviceMessageFormatter from "../utils/serviceMessageFormatter.js";
 import {ServiceManager} from "../models/Service.js";
 import cancelButton from "../utils/cancelButton.js";
 import {sendMarkdownMessageAndSave, sendMessageAndSave} from "../utils/clearChat.js";
-import {readFile} from "fs/promises";
+import textLoader from "../utils/getTexts.js";
 
 export const managerComposer = new Composer();
-const texts = JSON.parse(await readFile('./src/locales/uk.json', 'utf-8'));
 
 managerComposer.action(/^delete_(\d+)$/, async (ctx) => {
     try {
         const serviceId = ctx.match[1];
+        const {texts} = textLoader;
 
         await ServiceManager.removeOne(serviceId);
 
@@ -23,7 +23,7 @@ managerComposer.action(/^delete_(\d+)$/, async (ctx) => {
     }
 });
 
-managerComposer.hears(texts.back, async (ctx) => {
+managerComposer.hears('\uD83D\uDD19 Назад', async (ctx) => {
     if (!await cancelButton(ctx)) return
     return ctx.scene.leave();
 })
@@ -34,6 +34,7 @@ export const manageServices = new Scenes.WizardScene(
     async (ctx) => {
         try {
             const servicesList = await ServiceManager.getAll(ctx.message.from.id);
+            const {texts} = textLoader;
 
             // Если услуг нет, сообщаем об этом
             if (servicesList.length === 0) {
@@ -41,7 +42,7 @@ export const manageServices = new Scenes.WizardScene(
                 return ctx.scene.leave();
             }
 
-            await sendMessageAndSave(ctx,texts.services_title, Markup.keyboard([
+            await sendMessageAndSave(ctx, texts.services_title, Markup.keyboard([
                 [texts.back]
             ]).resize())
 

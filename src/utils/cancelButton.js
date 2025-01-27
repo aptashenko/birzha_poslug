@@ -1,10 +1,10 @@
 import toMainMenu from "./toMainMenu.js";
 import {deleteAllMessages} from "./clearChat.js";
-import {readFile} from "fs/promises";
-const texts = JSON.parse(await readFile('./src/locales/uk.json', 'utf-8'));
+import textLoader from "./getTexts.js";
 
 export default (async (ctx) => {
     const { text } = ctx.message;
+    const {texts} = textLoader;
     if (text === texts.cancel || text === texts.back) {
         await deleteAllMessages(ctx);
 
