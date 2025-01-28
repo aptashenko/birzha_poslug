@@ -10,12 +10,10 @@ import {managerComposer, manageServices} from "./src/wizards/manage-services.js"
 import {sendMarkdownMessageAndSave} from "./src/utils/clearChat.js";
 import {startMenuButtons} from "./src/configs/common.js";
 import textLoader from "./src/utils/getTexts.js";
-import {startPingServer} from "./src/utils/cron.js";
 
 const app = express();
 app.use(express.json());
 app.listen(SERVER_PORT, async () => {
-    startPingServer()
     await textLoader.loadTexts();
     console.log(`Express server is running on http://localhost:${SERVER_PORT}`);
 });
