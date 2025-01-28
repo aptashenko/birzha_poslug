@@ -75,7 +75,7 @@ export const createService = new Scenes.WizardScene(
         const {texts} = textLoader;
 
         const { data } = ctx.wizard.state;
-        data.username = text;
+        data.username = text.replace('@', '');
 
         await sendMarkdownMessageAndSave(ctx, serviceMessageFormatter(data),
             Markup.keyboard([
