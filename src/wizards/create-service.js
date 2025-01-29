@@ -8,6 +8,7 @@ import textLoader from "../utils/getTexts.js";
 import {UserClass} from "../models/User.js";
 
 const timeoutStart = (minutes, ctx) => {
+    ctx.reply('start timer')
     return setTimeout(() => {
         ctx.scene.leave(); // Выход из сцены
         toMainMenu(ctx, 'Десь ви пропали 😔')
