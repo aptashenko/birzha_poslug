@@ -5,6 +5,7 @@ import toMainMenu from "../utils/toMainMenu.js";
 import cancelButton from "../utils/cancelButton.js";
 import {sendMarkdownMessageAndSave, sendMessageAndSave} from "../utils/clearChat.js";
 import textLoader from "../utils/getTexts.js";
+import {UserClass} from "../models/User.js";
 export const createService = new Scenes.WizardScene(
     'create-service',
     async (ctx) => {
@@ -111,6 +112,9 @@ export const createService = new Scenes.WizardScene(
                     phone,
                     username
                 })
+                const servicesList = await ServiceManager.getAll(id.toString());
+
+                await UserClass.updateUser(id.toString(), {services: servicesList})
             } catch (error) {
                 console.error(error)
             }

@@ -8,8 +8,9 @@ import {createService} from "./src/wizards/create-service.js";
 import {findService} from "./src/wizards/find-service.js";
 import {managerComposer, manageServices} from "./src/wizards/manage-services.js";
 import {sendMarkdownMessageAndSave} from "./src/utils/clearChat.js";
-import {startMenuButtons} from "./src/configs/common.js";
+import {startMenuButtons, startMenuButtonsAdmin} from "./src/configs/common.js";
 import textLoader from "./src/utils/getTexts.js";
+import {UserClass} from "./src/models/User.js";
 
 const app = express();
 app.use(express.json());
@@ -34,26 +35,41 @@ bot.use(session())
     .use(managerComposer)
     .launch();
 bot.start(async (ctx) => {
+    const { id, username } = ctx.message.from;
+    const isExist = await UserClass.findById(id);
+
+    if (!isExist) {
+        const telegramId = id;
+        const nickName = username;
+        await UserClass.create({telegramId, nickName});
+    }
+    const buttons = await startMenuButtons(id.toString());
+
     await sendMarkdownMessageAndSave(
         ctx,
         `👋 Вітаємо у Біржі Послуг – зручній біржі послуг у Франції\\! 🤝\n\nТут ви можете:\n🔹 Знайти спеціаліста для будь\\-яких завдань\\.\n🔹 Запропонувати свої послуги та отримати клієнтів\\.\n🔹 Публікувати оголошення з детальним описом\\.`,
-        Markup.keyboard(startMenuButtons).resize());
+        Markup.keyboard(buttons).resize());
     await sendMarkdownMessageAndSave(
         ctx,
         `✨ Щоб розпочати:\n\n1️⃣ Оберіть у меню, що вас цікавить: знайти послугу або запропонувати послугу\\.\n2️⃣ Заповніть необхідну інформацію\\.\n3️⃣ Чекайте відповіді або знаходьте оголошення інших користувачів\\!\n\n🚀 Біржа Послуг – знайомтесь, співпрацюйте, досягайте разом\\!`
     )
 });
 
-bot.hears(startMenuButtons[0][0], (ctx) => {
+bot.hears(startMenuButtonsAdmin[0][0], (ctx) => {
     ctx.scene.enter('choose-category', {action: 'create'})
 });
 
-bot.hears(startMenuButtons[0][1], (ctx) => {
+bot.hears(startMenuButtonsAdmin[0][1], (ctx) => {
     ctx.scene.enter('choose-category', {action: 'find'})
 });
 
-bot.hears(startMenuButtons[1], (ctx) => {
+bot.hears(startMenuButtonsAdmin[1], (ctx) => {
     ctx.scene.enter('manage-services')
+});
+
+bot.hears(startMenuButtonsAdmin[2],  async(ctx) => {
+    const allUsers = await UserClass.getAll();
+    ctx.reply(`Всього користувачів: ${allUsers.length}`);
 });
 
 bot.on('message', async (ctx) => {

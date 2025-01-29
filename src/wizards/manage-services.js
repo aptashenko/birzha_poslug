@@ -4,6 +4,7 @@ import {ServiceManager} from "../models/Service.js";
 import cancelButton from "../utils/cancelButton.js";
 import {sendMarkdownMessageAndSave, sendMessageAndSave} from "../utils/clearChat.js";
 import textLoader from "../utils/getTexts.js";
+import {UserClass} from "../models/User.js";
 
 export const managerComposer = new Composer();
 
@@ -13,7 +14,10 @@ managerComposer.action(/^delete_(\d+)$/, async (ctx) => {
         const {texts} = textLoader;
 
         await ServiceManager.removeOne(serviceId);
+        const id = ctx.update.callback_query.from.id;
+        const servicesList = await ServiceManager.getAll(id.toString());
 
+        await UserClass.updateUser(id.toString(), {services: servicesList})
         ctx.deleteMessage()
 
         await sendMessageAndSave(ctx, texts.services_deleted)

@@ -27,7 +27,7 @@ export const chooseCategory = new Scenes.WizardScene(
         const parentIdx = mainMenu.findIndex(row => row.includes(text));
         if (parentIdx === -1) {
             await sendMessageAndSave(ctx, '📂 Оберіть категорію зі списку, будь ласка!');
-            return ctx.wizard.selectStep(0); // Вернуться на шаг 1
+            return
         }
 
         const childIndex = mainMenu[parentIdx].findIndex(el => el === text);
@@ -58,7 +58,13 @@ export const chooseCategory = new Scenes.WizardScene(
         const childIdx = data.category[1];
 
         const subCategoryParentIdx = subMenu[parentIdx][childIdx]
-            .findIndex(el => el.includes(text))
+            .findIndex(el => el.includes(text));
+
+        if (subCategoryParentIdx === -1) {
+            await sendMessageAndSave(ctx, '📂 Оберіть підкатегорію зі списку, будь ласка!');
+            return
+        }
+
         const subCategoryChildIdx = subMenu[parentIdx][childIdx][subCategoryParentIdx]
             .findIndex(el => el === text)
 
