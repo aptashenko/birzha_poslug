@@ -31,10 +31,12 @@ const currentScenes = [chooseCategory, createService, findService, manageService
 export const bot = new Telegraf(TELEGRAM_BOT_TOKEN);
 const stage = new Scenes.Stage(currentScenes);
 export const botMessages = new Map();
+bot.telegram.setWebhook('https://birzha-poslug.fly.dev/webhook');
+app.use(bot.webhookCallback('/webhook'));
+
 bot.use(session())
     .use(stage.middleware())
     .use(managerComposer)
-    .launch();
 bot.start(async (ctx) => {
     const { id, username } = ctx.message.from;
     const isExist = await UserClass.findById(id);
