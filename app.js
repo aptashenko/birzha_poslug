@@ -14,9 +14,10 @@ import {UserClass} from "./src/models/User.js";
 
 const app = express();
 app.use(express.json());
-app.listen(SERVER_PORT, "0.0.0.0",async () => {
+const port = 3000
+app.listen(port, "0.0.0.0",async () => {
     await textLoader.loadTexts();
-    console.log(`Express server is running on http://localhost:${SERVER_PORT || 3000}`);
+    console.log(`Express server is running on http://localhost:${port}`);
 });
 
 
