@@ -6,6 +6,14 @@ import cancelButton from "../utils/cancelButton.js";
 import {sendMarkdownMessageAndSave, sendMessageAndSave} from "../utils/clearChat.js";
 import textLoader from "../utils/getTexts.js";
 import {UserClass} from "../models/User.js";
+
+const timeoutStart = (minutes, ctx) => {
+    return setTimeout(() => {
+        ctx.scene.leave(); // Выход из сцены
+        toMainMenu(ctx, 'Десь ви пропали 😔')
+    }, 5 * 60 * 1000)
+}
+
 export const createService = new Scenes.WizardScene(
     'create-service',
     async (ctx) => {
@@ -17,6 +25,7 @@ export const createService = new Scenes.WizardScene(
             Markup.keyboard([
             [texts.cancel]
         ]).resize());
+        ctx.scene.state.timeout = timeoutStart(1, ctx);
         return ctx.wizard.next();
     },
     async (ctx) => {
@@ -125,6 +134,7 @@ export const createService = new Scenes.WizardScene(
             return; // Оставляем пользователя на этом шаге
         }
 
+        clearTimeout(ctx.scene.state.timeout)
         return ctx.scene.leave();
     }
 )
