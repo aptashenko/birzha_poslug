@@ -16,7 +16,7 @@ const app = express();
 app.use(express.json());
 app.listen(SERVER_PORT, "0.0.0.0",async () => {
     await textLoader.loadTexts();
-    console.log(`Express server is running on http://localhost:${SERVER_PORT}`);
+    console.log(`Express server is running on http://localhost:${SERVER_PORT || 3000}`);
 });
 
 
