@@ -50,7 +50,7 @@ bot.start(async (ctx) => {
 
     if (!isExist) {
         const telegramId = id;
-        await UserClass.create({telegramId, username: undefined});
+        await UserClass.create({telegramId, username});
     }
     const buttons = await startMenuButtons(id.toString());
 
