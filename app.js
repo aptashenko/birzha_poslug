@@ -1,6 +1,5 @@
 import express from 'express';
 import {Markup, Telegraf, session, Scenes} from 'telegraf';
-import { SERVER_PORT } from "./src/configs/configs.js";
 import { TELEGRAM_BOT_TOKEN } from "./src/configs/configs.js";
 import {sequelize} from "./src/configs/db.js";
 import {chooseCategory} from "./src/wizards/choose-category.js";
@@ -31,20 +30,27 @@ const currentScenes = [chooseCategory, createService, findService, manageService
 export const bot = new Telegraf(TELEGRAM_BOT_TOKEN);
 const stage = new Scenes.Stage(currentScenes);
 export const botMessages = new Map();
-bot.telegram.setWebhook('https://birzha-poslug.fly.dev/webhook');
-app.use(bot.webhookCallback('/webhook'));
+
+if (process.env.NODE_ENV !== "development") {
+    bot.telegram.setWebhook('https://birzha-poslug.fly.dev/webhook');
+    app.use(bot.webhookCallback('/webhook'));
+}
 
 bot.use(session())
     .use(stage.middleware())
     .use(managerComposer)
+
+if (process.env.NODE_ENV === "development") {
+    bot.launch()
+}
+
 bot.start(async (ctx) => {
     const { id, username } = ctx.message.from;
     const isExist = await UserClass.findById(id);
 
     if (!isExist) {
         const telegramId = id;
-        const nickName = username;
-        await UserClass.create({telegramId, nickName});
+        await UserClass.create({telegramId, username: undefined});
     }
     const buttons = await startMenuButtons(id.toString());
 

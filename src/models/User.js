@@ -13,6 +13,11 @@ export const User = sequelize.define('user', {
         defaultValue: 'user',
         allowNull: false
     },
+    username: {
+        type: DataTypes.STRING,
+        defaultValue: 'no_name',
+        allowNull: false
+    },
     services: {
         type: DataTypes.JSON,
         defaultValue: []
@@ -26,11 +31,11 @@ export const User = sequelize.define('user', {
 class UserClass {
     static async create(data) {
         try {
-            const { telegramId, nickName } = data;
+            const { telegramId, username } = data;
 
             return await User.create({
                 telegramId,
-                nickName
+                username
             });
         } catch (error) {
             console.error('Ошибка при создании пользователя:', error);

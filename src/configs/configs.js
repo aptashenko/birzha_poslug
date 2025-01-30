@@ -1,18 +1,7 @@
-import fs from "node:fs";
 import dotenv from "dotenv";
 
-const mode = 'dev';
-
-const environment = {
-    prod: '.env.production',
-    dev: '.env.development'
-}
-
-if (fs.existsSync(environment[mode])) dotenv.config({ path: environment[mode] });
-
-
-if (fs.existsSync('.env.local')) dotenv.config();
-
+const envFile = `.env.${process.env.NODE_ENV || "development"}`;
+dotenv.config({ path: envFile });
 
 export const TELEGRAM_BOT_TOKEN = process.env.BOT_TOKEN;
 export const SERVER_PORT = process.env.PORT;

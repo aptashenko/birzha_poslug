@@ -5,7 +5,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint src/**/*.js",
-    "start": "node app.js"
+    "startDev": "NODE_ENV=development node app.js",
+    "start": "NODE_ENV=production node app.js"
+
   },
   "type": "module",
   "keywords": [],
